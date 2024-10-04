@@ -1,0 +1,40 @@
+services:
+  db:
+    image: postgres
+    container_name: "database-song"
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+    networks:
+      - fullstack
+    volumes:
+      - database_postgres:/var/lib/postgresql/data
+
+  api:
+    build: .
+    container_name: "song"
+    environment:
+      DB_USERNAME: "root"
+      DB_PASSWORD: "root"
+      DB_DB: "postgres"
+      DB_HOST: "localhost"
+      DB_TABLE: "song"
+      DB_PORT: "5432"
+      SSL_MODE: "disable"
+      session_attrs: "read-write"
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    networks:
+      - fullstack
+
+volumes:
+  database_postgres:
+
+networks:
+  fullstack:
+    driver: bridge
