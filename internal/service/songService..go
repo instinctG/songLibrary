@@ -48,7 +48,7 @@ func (s *Service) GetSongText() (string, error) {
 	return "", nil
 }
 
-func (s *Service) DeleteSong(id uint) error {
+func (s *Service) DeleteSong() error {
 	err := s.Store.DeleteSong()
 	if err != nil {
 		return ErrNotImplemented

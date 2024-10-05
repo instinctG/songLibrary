@@ -26,7 +26,3 @@ func NewDatabase(dbSetting *setting.Database) (*Database, error) {
 
 	return &Database{Client: pool}, nil
 }
-
-func (d *Database) Ping(ctx context.Context) error {
-	return d.Client.Ping(ctx)
-}

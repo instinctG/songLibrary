@@ -37,11 +37,11 @@ func (h *Handler) mapRoutes() {
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte(`{"message": "pong"}`))
 	})
-	h.Router.HandleFunc("/songs/library", makeHTTPHandleFunc(h.GetLibrary)).Methods("GET")
-	h.Router.HandleFunc("/songs/{id}/text", makeHTTPHandleFunc(h.GetSongText)).Methods("GET")
+	//h.Router.HandleFunc("/songs/library", makeHTTPHandleFunc(h.GetLibrary)).Methods("GET")
+	//h.Router.HandleFunc("/songs/{id}/text", makeHTTPHandleFunc(h.GetSongText)).Methods("GET")
 	h.Router.HandleFunc("/songs", makeHTTPHandleFunc(h.AddSong)).Methods("POST")
-	h.Router.HandleFunc("/songs/{id}", makeHTTPHandleFunc(h.UpdateSong)).Methods("PUT")
-	h.Router.HandleFunc("/songs/{id}", makeHTTPHandleFunc(h.DeleteSong)).Methods("DELETE")
+	//h.Router.HandleFunc("/songs/{id}", makeHTTPHandleFunc(h.UpdateSong)).Methods("PUT")
+	//h.Router.HandleFunc("/songs/{id}", makeHTTPHandleFunc(h.DeleteSong)).Methods("DELETE")
 }
 
 func (h *Handler) Serve() error {

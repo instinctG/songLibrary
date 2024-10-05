@@ -1,40 +1,39 @@
 services:
-  db:
-    image: postgres
-    container_name: "database-song"
-    ports:
-      - "5432:5432"
-    environment:
-      - POSTGRES_DB=postgres
-      - POSTGRES_USER=root
-      - POSTGRES_PASSWORD=root
-    networks:
-      - fullstack
-    volumes:
-      - database_postgres:/var/lib/postgresql/data
-
-  api:
+  app:
     build: .
-    container_name: "song"
-    environment:
-      DB_USERNAME: "root"
-      DB_PASSWORD: "root"
-      DB_DB: "postgres"
-      DB_HOST: "localhost"
-      DB_TABLE: "song"
-      DB_PORT: "5432"
-      SSL_MODE: "disable"
-      session_attrs: "read-write"
+    container_name: song-rest-api
     ports:
-      - "8080:8080"
+      - "8080"
+    environment:
+      - HTTP_PORT=8080
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_NAME=postgres
+      - DB_PASSWORD=postgres
+      - SSL_MODE=disable
     depends_on:
       - db
     networks:
-      - fullstack
+      - app_network
 
-volumes:
-  database_postgres:
+  db:
+    image: postgres
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+      POSTGRES_DB: "postgres"
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_postgres:/var/lib/postgresql/data
+    networks:
+      - app_network
 
 networks:
-  fullstack:
+  app_network:
     driver: bridge
+
+volumes:
+  db_postgres:

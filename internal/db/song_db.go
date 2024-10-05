@@ -20,6 +20,6 @@ func (d *Database) UpdateSong() (model.Song, error) {
 
 func (d *Database) AddSong(group, song string) (model.Song, error) {
 
-	row, err := d.Client.QueryRow()
+	//row, err := d.Client.QueryRow()
 	return model.Song{}, nil
 }
