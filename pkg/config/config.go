@@ -1,15 +1,16 @@
-package setting
+package config
 
 import (
 	"github.com/caarlos0/env/v11"
 	"github.com/joho/godotenv"
-	"log"
 	"log/slog"
+	"os"
 )
 
 type Config struct {
 	HttpPort string `env:"HTTP_PORT" envDefault:"8080"`
 	Database Database
+	LogLevel string `env:"LOG_LEVEL" envDefault:"DEBUG"`
 }
 
 type Database struct {
@@ -26,10 +27,12 @@ func MustLoad() *Config {
 
 	if err := godotenv.Load("config/local.env"); err != nil {
 		slog.Warn("config wasn't loaded")
+		os.Exit(1)
 	}
 
 	if err := env.Parse(&cfg); err != nil {
-		log.Fatalf("cannot parse config: %s", err)
+		slog.Warn("cannot parse config: ", err)
+		os.Exit(1)
 	}
 
 	return &cfg
