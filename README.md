@@ -138,7 +138,7 @@ http://localhost:8080/swagger/index.html
 
 * API описанный свагером:
 ```
-GET http://localhost:8080/info
+GET http://localhost:63342/info?song=...&group=...
 ```
 
 #### API, который реализуем для добавления песни в БД:
