@@ -1,0 +1,266 @@
+basePath: /
+definitions:
+  model.ErrorResponse:
+    properties:
+      error:
+        example: something went wrong
+        type: string
+    type: object
+  model.MessageResponse:
+    properties:
+      message:
+        example: success
+        type: string
+    type: object
+  model.Song:
+    properties:
+      group:
+        example: Muse
+        type: string
+      id:
+        example: "1"
+        type: string
+      link:
+        example: https://www.youtube.com/watch?v=Xsp3_a-PMTw
+        type: string
+      releaseDate:
+        example: MM.DD.YYYY
+        type: string
+      song:
+        example: Supermassive Black Hole
+        type: string
+      text:
+        example: |-
+          Ooh baby, don't you know I suffer?
+          Ooh baby, can you hear me moan?
+        type: string
+    type: object
+  model.SongAddRequest:
+    properties:
+      group:
+        example: Muse
+        type: string
+      song:
+        example: Supermassive Black Hole
+        type: string
+    type: object
+  model.SongRequest:
+    properties:
+      group:
+        example: Muse
+        type: string
+      link:
+        example: https://www.youtube.com/watch?v=Xsp3_a-PMTw
+        type: string
+      releaseDate:
+        example: MM.DD.YYYY
+        type: string
+      song:
+        example: Supermassive Black Hole
+        type: string
+      text:
+        example: |-
+          Ooh baby, don't you know I suffer?
+          Ooh baby, can you hear me moan?
+        type: string
+    type: object
+  model.Verse:
+    properties:
+      text:
+        example: |-
+          Ooh baby, don't you know I suffer?
+          Ooh baby, can you hear me moan?
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: Swagger API for Song Library
+  title: Song Library API
+  version: "1.0"
+paths:
+  /song:
+    post:
+      consumes:
+      - application/json
+      description: Добавляет новую песню в библиотеку
+      parameters:
+      - description: Данные песни
+        in: body
+        name: song
+        required: true
+        schema:
+          $ref: '#/definitions/model.SongAddRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Song'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Добавить песню
+      tags:
+      - song
+  /song/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Удаляет песню по её ID
+      parameters:
+      - description: ID песни
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.MessageResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Удалить песню
+      tags:
+      - song
+    get:
+      consumes:
+      - application/json
+      description: Возвращает текст песни по её ID с пагинацией по куплетам
+      parameters:
+      - description: ID песни
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Номер страницы (по умолчанию 1)
+        in: query
+        name: page
+        type: integer
+      - description: Количество куплетов на странице (по умолчанию 10)
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Verse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Получить текст песни
+      tags:
+      - song
+    put:
+      consumes:
+      - application/json
+      description: Обновляет информацию о песне по её ID
+      parameters:
+      - description: ID песни
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Данные для обновления песни
+        in: body
+        name: song
+        required: true
+        schema:
+          $ref: '#/definitions/model.SongRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Song'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Обновить песню
+      tags:
+      - song
+  /songs:
+    get:
+      consumes:
+      - application/json
+      description: Возвращает список песен с возможностью фильтрации по группе, названию,
+        дате выпуска, тексту и ссылке
+      parameters:
+      - description: Фильтр по группе
+        in: query
+        name: group
+        type: string
+      - description: Фильтр по названию песни
+        in: query
+        name: title
+        type: string
+      - description: Фильтр по дате выпуска в формате MM.DD.YYYY
+        in: query
+        name: release-date
+        type: string
+      - description: Фильтр по тексту песни
+        in: query
+        name: text
+        type: string
+      - description: Фильтр по ссылке
+        in: query
+        name: link
+        type: string
+      - description: Номер страницы (по умолчанию 1)
+        in: query
+        name: page
+        type: integer
+      - description: Количество записей на странице (по умолчанию 10)
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Song'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Получить список песен
+      tags:
+      - songs
+swagger: "2.0"
