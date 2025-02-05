@@ -1,6 +1,7 @@
 -- +goose Up
 -- +goose StatementBegin
 CREATE TABLE IF NOT EXISTS song (
+    id SERIAL PRIMARY KEY,
     group_name VARCHAR(255) NOT NULL,
     title VARCHAR(255) NOT NULL ,
     release_date DATE NOT NULL ,

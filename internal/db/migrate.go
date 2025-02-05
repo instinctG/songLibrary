@@ -1,6 +1,7 @@
 package db
 
 import (
+	"errors"
 	"fmt"
 	"github.com/jackc/pgx/v5/stdlib"
 	"github.com/pressly/goose/v3"
@@ -15,9 +16,11 @@ func (d *Database) MigrateDB() error {
 	db := stdlib.OpenDBFromPool(d.Client)
 
 	if err := goose.Up(db, "./migrations"); err != nil {
-		return err
+		if errors.Is(err, goose.ErrAlreadyApplied) {
+			return fmt.Errorf("could not run up migrations: %w", err)
+		}
 	}
 
-	fmt.Println("Successfully migrated DB")
+	d.Log.Info("Successfully migrated DB")
 	return nil
 }
